@@ -1,14 +1,36 @@
-class TestEntry():
-    def __init__(self, name, action, status="Incomplete", logfile=None, strpad=10):
+from Tkinter import *
+
+class TestInfo():
+    def __init__(self, name, guiTest, status="Incomplete", logfile=None):
         self.name = name
-        self.action = action
+        self.guiTest = guiTest
         self.status = status
         self.logging = (logfile == None)
         self.logfile = logfile
-        
-        # bad separation of concerns
-        # but it gets the job done
-        self.strpad=strpad 
 
-    def getStr(self):
-        return self.name + "\t(" + self.status + ")"
+    def launchTest(self, root):
+        root.withdraw()
+        self.guiTest(root, self)
+        # left to guiTest to reiconify
+
+class GUITest(Toplevel):
+    def __init__(self, root, testInfo):
+        Toplevel.__init__(self)
+        
+        self.master = root
+        self.testInfo = testInfo
+
+    def cleanup(self):
+        # report progress to master
+        # then return focus to main menu
+        self.testInfo.status="Successful"
+        self.master.processResults(self.testInfo)
+        self.master.deiconify()
+
+    def destroy(self):
+        self.cleanup()
+        Toplevel.destroy(self)
+
+    def quit(self):
+        self.cleanup()
+        Toplevel.quit(self)

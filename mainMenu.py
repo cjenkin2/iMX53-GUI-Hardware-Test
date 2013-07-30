@@ -5,6 +5,8 @@ from ttk import Treeview
 
 from TestEntry import *
 
+from Dummy import *
+
 class GUIMainMenu(Frame):
     """Main menu for test of Genesi i.MX53 systems"""
 
@@ -31,10 +33,13 @@ class GUIMainMenu(Frame):
 
     def createTestEntries(self):
         #TODO must be a better way. Pickle?
-        self.tests = [TestEntry("Audio", None), TestEntry("Clock", None),
-                      TestEntry("Display", None), TestEntry("Keyboard", None),
-                      TestEntry("Network", None), TestEntry("SSD", None),
-                      TestEntry("Video", None)]
+        self.tests = [TestInfo("Audio", Dummy1), TestInfo("Clock", Dummy1),
+                      TestInfo("Display", Dummy1), TestInfo("Keyboard", Dummy1),
+                      TestInfo("Network", Dummy1), TestInfo("SSD", Dummy1),
+                      TestInfo("Video", Dummy1)]
+        self.testsLookup = {}
+        for te in self.tests:
+            self.testsLookup.update({te.name : te})
 
     def createWidgets(self):
         """Create all the initial widgets for this menu"""
@@ -56,17 +61,38 @@ class GUIMainMenu(Frame):
                       columnspan=2)
 
         """Buttons"""
-        self.btnOK = Button(self, text="OK", command=None)
+        self.btnOK = Button(self, text="OK", command=self.launchTest)
         self.btnOK.grid(row=self.BUTTON_ROW, column=0)
         self.btnCancel = Button(self, text="Cancel", command=self.quit)
         self.btnCancel.grid(row=self.BUTTON_ROW, column=1)
-        
 
-def treeviewInsertTest(trv, testEntry, pos='end'):
+    def launchTest(self):
+        # get the item in focus
+        testItem = self.trv.item(self.trv.focus())
+
+        if not testItem['text'] == '':
+            testInfo = self.testsLookup[testItem['text']]
+            testInfo.launchTest(self)
+
+    def processResults(self, testInfo):
+        # TODO tomorrow
+        pass
+
+    def withdraw(self):
+        """Helpful function to hide window"""
+        self.master.withdraw()
+
+    def deiconify(self):
+        """Helpful function to restore window"""
+        self.master.deiconify()
+
+
+def treeviewInsertTest(trv, testInfo, pos='end'):
     """Add test to Treeview widget"""
-    trv.insert("", pos, text=testEntry.name, values=(testEntry.status),
-               tag=testEntry.name)
+    trv.insert("", pos, text=testInfo.name, values=(testInfo.status),
+               tag=testInfo.name)
 
 if __name__ == "__main__":
-    mainMenu = GUIMainMenu()
-    mainMenu.mainloop()
+    root = Tk()
+    mainMenu = GUIMainMenu(root)
+    root.mainloop()
