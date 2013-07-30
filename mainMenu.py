@@ -76,10 +76,12 @@ class GUIMainMenu(Frame):
 
     def processResults(self, testInfo):
         self.trv.item(testInfo.name, values=(testInfo.status),
-                      tag=(testInfo.status))
+                      tags=(testInfo.status))
         # update color notifications
         self.trv.tag_configure('Success', foreground='green')
         self.trv.tag_configure('Failure', foreground='red')
+
+        self.deiconify()
 
     def withdraw(self):
         """Helpful function to hide window"""

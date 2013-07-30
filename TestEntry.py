@@ -17,14 +17,13 @@ class GUITest(Toplevel):
     def __init__(self, root, testInfo):
         Toplevel.__init__(self)
         
-        self.master = root
+        self.reportTo = root
         self.testInfo = testInfo
 
     def cleanup(self):
-        # report progress to master
+        # report progress
         # then return focus to main menu
-        self.master.processResults(self.testInfo)
-        self.master.deiconify()
+        self.reportTo.processResults(self.testInfo)
 
     def destroy(self):
         self.cleanup()
