@@ -23,7 +23,6 @@ class GUITest(Toplevel):
     def cleanup(self):
         # report progress to master
         # then return focus to main menu
-        self.testInfo.status="Successful"
         self.master.processResults(self.testInfo)
         self.master.deiconify()
 
@@ -34,3 +33,11 @@ class GUITest(Toplevel):
     def quit(self):
         self.cleanup()
         Toplevel.quit(self)
+
+    def finishSuccess(self):
+        self.testInfo.status="Success"
+        self.destroy()
+
+    def finishFailure(self):
+        self.testInfo.status="Failure"
+        self.destroy()

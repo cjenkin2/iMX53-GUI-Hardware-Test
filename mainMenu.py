@@ -5,7 +5,7 @@ from ttk import Treeview
 
 from TestEntry import *
 
-from Dummy import *
+from HardwareTestGUIs import *
 
 class GUIMainMenu(Frame):
     """Main menu for test of Genesi i.MX53 systems"""
@@ -33,10 +33,10 @@ class GUIMainMenu(Frame):
 
     def createTestEntries(self):
         #TODO must be a better way. Pickle?
-        self.tests = [TestInfo("Audio", Dummy1), TestInfo("Clock", Dummy1),
+        self.tests = [TestInfo("Audio", AudioGUI), TestInfo("Clock", Dummy1),
                       TestInfo("Display", Dummy1), TestInfo("Keyboard", Dummy1),
                       TestInfo("Network", Dummy1), TestInfo("SSD", Dummy1),
-                      TestInfo("Video", Dummy1)]
+                      TestInfo("Video", Dummy2)]
         self.testsLookup = {}
         for te in self.tests:
             self.testsLookup.update({te.name : te})
@@ -75,8 +75,11 @@ class GUIMainMenu(Frame):
             testInfo.launchTest(self)
 
     def processResults(self, testInfo):
-        # TODO tomorrow
-        pass
+        self.trv.item(testInfo.name, values=(testInfo.status),
+                      tag=(testInfo.status))
+        # update color notifications
+        self.trv.tag_configure('Success', foreground='green')
+        self.trv.tag_configure('Failure', foreground='red')
 
     def withdraw(self):
         """Helpful function to hide window"""
@@ -89,8 +92,8 @@ class GUIMainMenu(Frame):
 
 def treeviewInsertTest(trv, testInfo, pos='end'):
     """Add test to Treeview widget"""
-    trv.insert("", pos, text=testInfo.name, values=(testInfo.status),
-               tag=testInfo.name)
+    trv.insert("", pos, iid=testInfo.name,
+               text=testInfo.name, values=(testInfo.status))
 
 if __name__ == "__main__":
     root = Tk()
