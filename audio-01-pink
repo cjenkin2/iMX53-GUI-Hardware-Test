@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#TODO make more configurable?
+
+speaker-test -l 1
