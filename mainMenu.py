@@ -35,8 +35,8 @@ class GUIMainMenu(Frame):
         #TODO must be a better way. Pickle?
         self.tests = [TestInfo("Audio", AudioGUI), TestInfo("Clock", Dummy1),
                       TestInfo("Display", Dummy1), TestInfo("Keyboard", Dummy1),
-                      TestInfo("Network", Dummy1), TestInfo("SSD", Dummy1),
-                      TestInfo("Video", Dummy2)]
+                      TestInfo("Network", Dummy1), TestInfo("SSD", Dummy2),
+                      TestInfo("Video", VideoGUI)]
         self.testsLookup = {}
         for te in self.tests:
             self.testsLookup.update({te.name : te})
@@ -63,8 +63,8 @@ class GUIMainMenu(Frame):
         """Buttons"""
         self.btnOK = Button(self, text="OK", command=self.launchTest)
         self.btnOK.grid(row=self.BUTTON_ROW, column=0)
-        self.btnCancel = Button(self, text="Cancel", command=self.quit)
-        self.btnCancel.grid(row=self.BUTTON_ROW, column=1)
+        self.btnQuit = Button(self, text="Quit", command=self.quit)
+        self.btnQuit.grid(row=self.BUTTON_ROW, column=1)
 
     def launchTest(self):
         # get the item in focus
