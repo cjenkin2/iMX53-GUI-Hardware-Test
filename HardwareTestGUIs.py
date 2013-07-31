@@ -82,6 +82,7 @@ the clip back. Pleae speak or make some noise when you are prompted.
         pg2lb.grid(row=0, column=0, columnspan=3)
 
         self.part1Status = StringVar()
+        self.part1Status.set("normal")
 
         pg2rsucc = Radiobutton(self.pg2, variable=self.part1Status, value="normal",
             text="Normal audio")
@@ -127,12 +128,42 @@ after the clip is finished.
         pg1text = mkTextPage(tmptxt, self.pg1)
         pg1text.grid(row=0, column=0, columnspan=2)
 
-        btnOK = Button(self.pg1, text="OK", action=None)
+        btnOK = Button(self.pg1, text="OK", command=self.launchVideoTest)
         btnOK.grid(row=1, column=0)
         btnCancel = Button(self.pg1, text="Cancel", command=self.destroy)
         btnCancel.grid(row=1, column=1)
 
         self.pg1.grid(row=0, column=0, columnspan=2)
+
+    def createPg2(self):
+        self.pg2 = Frame(self)
+
+        lbl1 = Label(self.pg2, text="Indicate the outcome of the test by selecting one of the options below")
+        lbl1.grid(row=0, column=0, columnspan=3)
+
+        pg2btnSubmit = Button(self.pg2, text="Proceed", command=self.proceedPart2)
+        pg2btnSubmit.grid(row=4, column=2)
+
+        self.pg2.grid(row=0, column=0)
+        
+
+    def launchVideoTest(self):
+        # cleanup
+        self.withdraw()
+        self.pg1.grid_forget()
+
+        subprocess.call("timeout 30 totem big_buck_bunny_720x576_surround.clip2.avi", shell=True)
+
+        self.createPg2()
+        self.deiconify()
+
+    def proceedPart2(self):
+        # cleanup
+        self.withdraw()
+
+        self.testInfo.status="Success"
+
+        self.destroy()
         
 class Dummy1(GUITest):
     def __init__(self, root, testInfo):
